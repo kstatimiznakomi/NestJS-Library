@@ -1,0 +1,126 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+    provider = "prisma-client-js"
+    previewFeatures = ["fullTextSearchPostgres"]
+}
+
+datasource db {
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+}
+
+model Book {
+    id              Int               @id @default(autoincrement())
+    count           Int
+    bookName        String            @map("book_name") @db.VarChar(255)
+    poster          String            @map("poster") @db.VarChar(255)
+    description     String
+    publicDate      Int?              @map("publish_date")
+    journal_notes   Journal_Notes[]
+    author          Authors_Books[]
+    genres_books    Books_Genres[]
+    publisher_books Publisher_Books[]
+    favourite       Favourite[]
+
+    @@map("book")
+}
+
+model Author {
+    id                Int                 @id @default(autoincrement())
+    authorName        String              @map("firstname") @db.VarChar(255)
+    authorLastName    String              @map("lastname") @db.VarChar(255)
+    authorSurname     String?             @map("surname") @db.VarChar(255)
+    book              Authors_Books[]
+
+    @@map("author")
+}
+
+model Genre {
+    id           Int            @id @default(autoincrement())
+    genre_name   String         @db.VarChar(255)
+    genres_books Books_Genres[]
+
+    @@map("genre")
+}
+
+model Publisher {
+    id                Int                 @id @default(autoincrement())
+    publisher_name    String              @db.VarChar(255)
+    publisher_books   Publisher_Books[]
+
+    @@map("publisher")
+}
+
+model User {
+    id        Int     @id @unique @default(autoincrement())
+    email     String  @unique @db.VarChar(255)
+    password  String? @db.VarChar(255)
+    role      String  @db.VarChar(255)
+    firstname String  @db.VarChar(255)
+    username  String  @db.VarChar(255)
+    lastname  String  @db.VarChar(255)
+    phone     String  @db.VarChar(255)
+    surname   String? @db.VarChar(255)
+    journal_notes     Journal_Notes[]
+    favourite         Favourite[]
+
+    @@map("user")
+}
+
+model Authors_Books {
+    book      Book   @relation(fields: [bookId], references: [id])
+    bookId   Int @map("books_id")
+    author    Author @relation(fields: [authorId], references: [id])
+    authorId Int @map("authors_id")
+
+    @@map("authors_books")
+    @@id([bookId, authorId])
+}
+
+model Publisher_Books {
+    publisher    Publisher @relation(fields: [publisher_id], references: [id])
+    publisher_id Int
+    book         Book      @relation(fields: [book_id], references: [id])
+    book_id      Int
+
+    @@map("publisher_books")
+    @@id([book_id, publisher_id])
+}
+
+model Favourite {
+    user         User  @relation(fields: [user_id], references: [id])
+    user_id      Int
+    book         Book  @relation(fields: [book_id], references: [id])
+    book_id      Int
+
+    @@map("favourite")
+    @@id([book_id, user_id])
+}
+
+model Books_Genres {
+    book     Book  @relation(fields: [book_id], references: [id])
+    book_id  Int
+    genre    Genre @relation(fields: [genre_id], references: [id])
+    genre_id Int
+
+    @@map("books_genres")
+    @@id([book_id, genre_id])
+}
+
+model Journal_Notes {
+    book             Book          @relation(fields: [book_id], references: [id])
+    book_id          Int
+    user             User @relation(fields: [user_id], references: [id])
+    user_id          Int
+    status           String
+    date_return      DateTime
+    date_take        DateTime
+
+    @@map("journal_notes")
+    @@id([book_id, user_id])
+}
