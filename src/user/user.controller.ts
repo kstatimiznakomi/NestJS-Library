@@ -1,4 +1,4 @@
-import { Controller, Get, HttpException, Param, Query, Req } from '@nestjs/common';
+import { Controller, Get, HttpException, Param, Req } from '@nestjs/common';
 import { UserService } from './user.service';
 import { BookService } from '../book/book.service';
 import { Request } from 'express';
@@ -19,8 +19,8 @@ export class UserController {
     return this.userService.addOrDeleteFavourite(cookies.accessToken, bookId);
   }
 
-  @Get('/favourite/u/:userId')
-  async getFavouriteByUser(@Param('userId') userId, @Query() params: CriteriaDTO) {
+  @Get(['/favourite/u/:userId/:page'])
+  async getFavouriteByUser(@Param('userId') userId, @Param() params: CriteriaDTO) {
     return this.userService.getFavouriteBooks(userId, params);
   }
 

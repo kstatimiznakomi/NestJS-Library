@@ -32,7 +32,7 @@ export class SearchService {
         where: {
           AND: [],
         },
-        include: {},
+        include: {} as any,
       };
 
       if (params.bookName) {
@@ -51,12 +51,44 @@ export class SearchService {
       }
 
       if (params.authorId) {
-        Object.assign(searchQuery.include, {
-          author: true,
+        searchQuery.where.AND.push({
+          author: {
+            some: {
+              authorId: Number(params.authorId),
+            },
+          },
         });
-        Object.assign(searchQuery.where, {
-          authorId: Number(params.authorId),
+        searchQuery.include.author = {
+          include: { author: true },
+        };
+      }
+
+      if (params.genreId) {
+        searchQuery.where.AND.push({
+          genres: {
+            some: {
+              genre_id: Number(params.genreId),
+            },
+          },
         });
+        searchQuery.include.genres = {
+          include: {
+            genre: true,
+          },
+        };
+      }
+
+      if (params.publisherId) {
+        searchQuery.where.AND.push({
+          publisher: {
+            some: {
+              publisher_id: Number(params.publisherId),
+            },
+          },
+        });
+        searchQuery.include.publisher = {
+          include: { publisher: true },
+        };
       }
 
       const count = (await this.prisma.book.findMany(searchQuery)).length;

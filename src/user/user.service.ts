@@ -9,6 +9,7 @@ import { BookService } from '../book/book.service';
 import { CriteriaDTO } from '../search/criteria.dto';
 import { plainToInstance } from 'class-transformer';
 import { BookDTO } from '../book/book.dto';
+import { User } from '../types';
 
 @Injectable()
 export class UserService {

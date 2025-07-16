@@ -3,6 +3,7 @@ import { plainToInstance } from 'class-transformer';
 import { PrismaService } from 'src/db/prisma.service';
 import { PageService } from 'src/paging/page.service';
 import { BookDTO } from './book.dto';
+import { Book } from '../types';
 
 @Injectable()
 export class BookService {

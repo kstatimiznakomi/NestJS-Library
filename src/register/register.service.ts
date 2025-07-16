@@ -3,6 +3,7 @@ import { PrismaService } from '../db/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { UserDTO } from '../user/user.dto';
 import { UserService } from '../user/user.service';
+import { User } from '../types';
 
 @Injectable()
 export class RegisterService {

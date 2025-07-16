@@ -1,4 +1,4 @@
-type User = {
+export type User = {
   id: number,
   lastname: string,
   surname: string,
@@ -10,7 +10,13 @@ type User = {
   phone: string,
 };
 
-type Book = {
+export type Criteries = {
+  author: boolean,
+  genre: boolean,
+  publisher: boolean,
+};
+
+export type Book = {
   id: number,
   bookName: string,
   poster: string,

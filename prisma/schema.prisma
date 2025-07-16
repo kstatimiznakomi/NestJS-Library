@@ -23,8 +23,8 @@ model Book {
     publicDate      Int?              @map("publish_date")
     journal_notes   Journal_Notes[]
     author          Authors_Books[]
-    genres_books    Books_Genres[]
-    publisher_books Publisher_Books[]
+    genres          Books_Genres[]
+    publisher       Publisher_Books[]
     favourite       Favourite[]
 
     @@map("book")
@@ -74,9 +74,9 @@ model User {
 
 model Authors_Books {
     book      Book   @relation(fields: [bookId], references: [id])
-    bookId   Int @map("books_id")
+    bookId   Int @map("book_id")
     author    Author @relation(fields: [authorId], references: [id])
-    authorId Int @map("authors_id")
+    authorId Int @map("author_id")
 
     @@map("authors_books")
     @@id([bookId, authorId])
